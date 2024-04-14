@@ -1,4 +1,4 @@
-.login-input {
+.signup-input {
   margin-top: 10px !important;
 }
 
@@ -15,20 +15,19 @@
 }
 
 .btnstyle {
-  margin: 10px 0;
+  margin-top: 15px !important;
   background-color: #333333 !important;
   color: rgb(177, 128, 255) !important;
-  padding: 10px !important;
+  padding: 15px !important;
   font-size: 20px !important;
-  border-radius: 50px;
 }
 
-.login-page-container {
+.signup-page-container {
   /* background-image: url('./background.jpg') !important; */
   background-color: rgb(177, 128, 255) !important;
   background-size: cover;
   min-height: 92vh;
-  padding: 30px;
+  padding: 25px;
 }
 
 .heading {

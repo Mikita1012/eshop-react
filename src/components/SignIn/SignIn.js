@@ -1,116 +1,90 @@
-import { useContext, useState } from "react";
-import { Avatar, Button, TextField, Typography } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from '../../common/AuthContext'
-import NavigationBar from "../NavigationBar/NavigationBar";
-import axios from "axios";
 
-
+import React, { useContext, useState } from 'react';
+import { Context } from '../../common/Context';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Grid, Paper, Avatar, TextField, Button, Typography, FormControlLabel, Checkbox } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import "./SignIn.css";
+import NavigationBar from '../NavigationBar/NavigationBar'
 
-function SignIn() {
-  const navigate = useNavigate();
-  const { authToken, setToken, setUserId, setIsAdmin } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+export default function SignIn() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { setToken } = useContext(Context);
+    const navigate = useNavigate();
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+    async function signInHandler(event) {
+        event.preventDefault();
 
-    setEmailError(false);
-    setPasswordError(false);
+        try {
+            // Send the form data to the server using fetch or any other method
+            const rawResponse = await fetch('http://localhost:3001/api/v1/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
 
-    if (email === "") {
-      setEmailError(true);
+            // Handle the response from the server
+            if (rawResponse.ok) {
+                // Successful sign-up, you can redirect the user to another page or show a success message
+                const authToken = rawResponse.headers.get("x-auth-token");
+                setToken(authToken);
+                localStorage.setItem('token', authToken);
+                navigate('/Products');
+                // console.log(rawResponse.headers);
+            } else {
+                const response = await rawResponse.text()
+                // Handle errors from the server
+                alert(response);
+            }
+        } catch (error) {
+            // Handle network errors or other exceptions
+            console.error('Error during sign-in:', error);
+        }
     }
-    if (password === "") {
-      setPasswordError(true);
-    }
 
-    if (email && password) {
-      axios
-        .post("http://localhost:3001/api/v1/auth", {
-          email: email,
-          password: password,
-        })
-        .then(function (response) {
-          if (response.data.id) {
-            setUserId(response.data.id);
-          }
-          if (response.data.token) {
-            setToken(response.data.token);
-          }
-          if (response.data.roles && response.data.roles.includes("ADMIN")) {
-            setIsAdmin(true);
-          }
-          navigate("/products");
-        })
-        .catch(function () {
-          alert("Error: Invalid credentials.");
-        });
-    }
-  };
-
-  if (authToken) {
-    navigate("/products");
-  }
-
-  return (
-    <>
-      <NavigationBar />
-      <div className="signinBucket">
-        <form autoComplete="off" onSubmit={onSubmit}>
-          <Avatar className="avatarIcon">
-            <LockIcon />
-          </Avatar>
-          <Typography gutterBottom variant="h5" component="p">
-            Sign in
-          </Typography>
-          <TextField
-            label="Email Address"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            variant="outlined"
-            type="email"
-            sx={{ mb: 4 }}
-            fullWidth
-            value={email}
-            error={emailError}
-          />
-          <TextField
-            label="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            variant="outlined"
-            type="password"
-            value={password}
-            error={passwordError}
-            fullWidth
-            sx={{ mb: 4 }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            sx={{ mt: 2, width: "100%" }}
-          >
-            Sign In
-          </Button>
-          <div className="login
-          
-          Link">
-                      <Link to="/signup">Don't have an account? Sign Up</Link>
-                    </div>
-        </form>
-      </div>
-      <div className="signinFooter">
-        Copyright &copy; <Link href="https://www.upgrad.com/">upGrad</Link> 2023
-      </div>
-    </>
-  );
+    return (
+        <div>
+            <NavigationBar />
+            <Grid container justifyContent="center" alignItems="center" className="login-page-container"> {/* Apply background image to Grid container */}
+                <Paper elevation={10} className='paperStyle'>
+                    <Grid align='center'>
+                        <div className='heading'>
+                            <Avatar className='avatarStyle'>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <h1>Welcome</h1>
+                        </div>
+                    </Grid>
+                    <form onSubmit={signInHandler}>
+                        <TextField value={email} onChange={(e) => setEmail(e.target.value)} className="login-input" label='Email' placeholder='Enter your email' fullWidth required />
+                        <TextField value={password} onChange={(e) => setPassword(e.target.value)} className="login-input" label='Password' placeholder='Enter your password' type='password' fullWidth required />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    name="checkedB"
+                                    color="primary"
+                                />
+                            }
+                            label="Remember me"
+                        />
+                        <Button type='submit' color='primary' variant="outlined" className='btnstyle' fullWidth>Sign In</Button>
+                    </form>
+                    <hr />
+                    <Typography sx={{ fontSize: 20, textAlign: "center", color: "grey" }}>
+                        For E-shoping? Click Below
+                        <br />
+                        <Link to="/signup"><Button type='submit' color='primary' variant="outlined" className='btnstyle' fullWidth>Sign Up</Button></Link>
+                    </Typography>
+                    <hr />
+                </Paper>
+            </Grid>
+        </div>
+    );
 }
-
-export default SignIn;
