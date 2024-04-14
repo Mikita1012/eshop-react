@@ -106,10 +106,10 @@ const Products = () => {
     <Box sx={{ width: 270 }} role="presentation" onClick={toggleDrawer(false)}>
       <List >
         {[
-          { text: 'Default', icon: <SortIcon sx={{ color: 'orange' }} /> },
-          { text: 'Price high to low', icon: <PriceDownIcon sx={{ color: 'orange' }} /> },
-          { text: 'Price low to high', icon: <PriceUpIcon sx={{ color: 'orange' }} /> },
-          { text: 'Newest', icon: <NewestIcon sx={{ color: 'orange' }} /> }
+          { text: 'Default', icon: <SortIcon sx={{ color: 'purple' }} /> },
+          { text: 'Price high to low', icon: <PriceDownIcon sx={{ color: 'purple' }} /> },
+          { text: 'Price low to high', icon: <PriceUpIcon sx={{ color: 'purple' }} /> },
+          { text: 'Newest', icon: <NewestIcon sx={{ color: 'purple' }} /> }
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton onClick={handleSortChange}>
@@ -159,8 +159,8 @@ const Products = () => {
     <div>
       <div className='main'>
         <NavigationBar loggedIn={isLoggedIn} isAdmin={adminValue} isProductPage={true}/>
-        <div className='categories'>
-          <Button color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'orange' }} onClick={toggleDrawer(true)}><SortIcon />Sort By</Button>
+        <div className='categories' style={{marginTop: '10px'}}>
+          <Button color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'black' }} onClick={toggleDrawer(true)}><SortIcon />Sort By</Button>
           <Drawer
             className="filter-menu"
             open={open}
@@ -184,19 +184,20 @@ const Products = () => {
             aria-label="Platform"
             sx={{ backgroundColor: '#333333' }}
           >
-            <ToggleButton value="All" sx={{ color: '#ff8c00', '&.Mui-selected': { color: 'black', backgroundColor: '#ff8c00' } }}>All</ToggleButton>
+            <ToggleButton value="All" sx={{ color: 'white', '&.Mui-selected': { color: 'white', backgroundColor: 'purple' } }}>All</ToggleButton>
             {categories.map((category, index) => (
-              <ToggleButton key={index} value={category} sx={{ color: '#ff8c00', '&.Mui-selected': { color: 'black', backgroundColor: '#ff8c00' } }}>
+              <ToggleButton key={index} value={category} sx={{ color: 'white', '&.Mui-selected': { color: 'black', backgroundColor: 'purple' } }}>
                 {category}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
         </div>
-        <div className='products-grid'>
+        
+        <div className='products-grid' style={{marginTop: '50px'}}>
           <Grid container spacing={2}> {/* Grid container */}
             {filteredProducts.map((product, index) => (
               <Grid item key={index} xs={12} sm={6} md={4} lg={3}> {/* Grid item */}
-                <Card className="card-container" sx={{ maxWidth: 320, backgroundColor: '#333333', borderRadius: 6 }}>
+                <Card className="card-container" sx={{ maxWidth: 320, backgroundColor: '#ccc', borderRadius: 6 }}>
                   <CardMedia
                     component="img"
                     height="310"
@@ -218,7 +219,7 @@ const Products = () => {
                     <div style={{ alignSelf: 'flex-end' }}>
                       {/* Using Link to navigate to product details page */}
                       <Link to={"/details"}>
-                        <Button onClick={() => buyButtonHandler(product._id)} className="buy-button" color="inherit" variant="outlined" sx={{ fontSize: 18, paddingLeft: 4, paddingRight: 4, borderRadius: 7, marginRight: 1, color: 'orange' }}>
+                        <Button onClick={() => buyButtonHandler(product._id)} className="buy-button" color="inherit" variant="outlined" sx={{ fontSize: 18, paddingLeft: 4, paddingRight: 4, borderRadius: 7, marginRight: 1, color: 'white' }}>
                           Buy
                         </Button>
                       </Link>
@@ -232,7 +233,7 @@ const Products = () => {
       </div>
       <footer className="footer">
         <Typography variant="body2" className="footer">
-          ©2024, Upgrad Eshop, shoaib , all rights reserved
+           Upgrad Eshop ©2024
         </Typography>
       </footer>
     </div>

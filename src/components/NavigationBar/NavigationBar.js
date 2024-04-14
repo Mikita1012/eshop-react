@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Box, TextField, Modal, Link, Autocomplete } from "@mui/material";
+import { Button, Box, TextField, Modal, Link, Autocomplete, Divider } from "@mui/material";
 import SearchInput from "../search/SearchInput";
 import { Context } from "../../common/Context";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -142,11 +142,11 @@ function NavigationBar({ loggedIn, isAdmin, isProductPage }) {
                   />
                 </ThemeProvider>
               </div>}
-              <Link to='/Products'>
-                <Button color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'orange' }}>Home</Button>
+              <Link to='/'>
+                <Button color="inherit" variant="contained" sx={{ marginLeft: 3, color: 'purple' }}>Home</Button>
               </Link>
-              {isAdmin && <Link to = "/Manage_Products" ><Button color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'orange' }}>Add Product</Button></Link>}
-              <Button onClick={handleLogout} color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'orange' }}>LogOut</Button>
+              {isAdmin && <Link to = "/mng-product" ><Button color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'white' }}>Add Product</Button></Link>}
+              <Button onClick={handleLogout} color="inherit" variant="outlined" sx={{ marginLeft: 3, color: 'white' }}>LogOut</Button>
               <Modal
                 open={openLogoutModal}
                 onClose={handleCloseLogoutModal}
@@ -165,13 +165,12 @@ function NavigationBar({ loggedIn, isAdmin, isProductPage }) {
                     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                   }}
                 >
-                  <Typography variant="h5" component="h2" gutterBottom>
+                  <Typography variant="h5" component="h2" gutterBottom sx={{textAlign: 'center', fontStyle: 'italic'}}>
                     Logout
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                    Want to logout?
-                    <br />
-                    When Logout you have to signin again!
+                    Are you sure you want to log out ? <br/>
+                     <br/>
                   </Typography>
                   <Button onClick={handleConfirmLogout} variant="outlined" color="inherit" sx={{ color: 'white', backgroundColor: '#333333', marginRight: '10px' }}>
                     Yes

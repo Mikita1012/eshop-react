@@ -279,7 +279,7 @@ export default function ManageProduct() {
       </div>
       <footer className="footer-manage-products">
         <Typography variant="body2" className="footer">
-        ©2024, Upgrad Eshop, shoaib , all rights reserved
+         Upgrad Eshop ©2024
         </Typography>
       </footer>
       <Modal

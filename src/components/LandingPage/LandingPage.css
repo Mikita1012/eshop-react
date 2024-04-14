@@ -1,5 +1,6 @@
 .background-container {
     /* background-image: url('./background.png'); */
+    background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
