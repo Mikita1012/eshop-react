@@ -1,184 +1,208 @@
-import { TextField, Container,Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import React, { useState } from 'react'
-import '../SignUp/SignUp.css';
+import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LockIcon from "@mui/icons-material/Lock";
+import axios from "axios";
+import NavigationBar from "../NavigationBar/NavigationBar"
 
-const SignUp = () => {
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        contactNumber: '',
-        password: '',
-    });
+import "./Signup.css";
 
-    const [formErrors, setFormErrors] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        contactNumber: '',
-        password: '',
-    });
+function Signup() {
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [contactNumberError, setContactNumberError] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+  // const onSubmit = (event) => {
+  //   event.preventDefault();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            contactNumber: '',
-            password: '',
-        })
+  //   setFirstNameError(false);
+  //   setLastNameError(false);
+  //   setEmailError(false);
+  //   setPasswordError(false);
+  //   setContactNumberError(false);
 
-        // Perform validation before submission
-        let errors = {};
-        let isValid = true;
+  //   if (firstName === "") {
+  //     setFirstName(true);
+  //   }
+  //   if (lastName === "") {
+  //     setLastName(true);
+  //   }
+  //   if (email === "") {
+  //     setEmailError(true);
+  //   }
+  //   if (password === "") {
+  //     setPasswordError(true);
+  //   }
+  //   if (contactNumber === "") {
+  //     setContactNumberError(true);
+  //   }
 
-        // Name validation: required
-        if (!formData.name.trim()) {
-            errors.name = 'Name is required';
-            isValid = false;
-        }
+  //   if (firstName && lastName && email && password && contactNumber) {
+  //     axios
+  //       .post("http://localhost:8080/api/auth/signup", {
+  //         firstName: firstName,
+  //         lastName: lastName,
+  //         email: email,
+  //         password: password,
+  //         contactNumber: contactNumber,
+  //       })
+  //       .then(function (response) {
+  //         alert(response.data.message);
+  //         navigate("/login");
+  //       })
+  //       .catch(function (error) {
+  //         alert(
+  //           "Error: There was an issue in registering the user, please try again later."
+  //         );
+  //       });
+  //   }
+  // };
 
-        // Email validation: required and valid format
-        if (!formData.email.trim()) {
-            errors.email = 'Email is required';
-            isValid = false;
-        } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-            errors.email = 'Invalid email address';
-            isValid = false;
-        }
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-        // Username validation: required
-        if (!formData.username.trim()) {
-            errors.username = 'Username is required';
-            isValid = false;
-        }
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          firstName,
+          lastName,
+          contactNumber,
+        }),
+      });
 
-        // Contact Number validation: required and valid format
-        if (!formData.contactNumber.trim()) {
-            errors.contactNumber = 'Contact Number is required';
-            isValid = false;
-        } else if (!/^\d{10}$/.test(formData.contactNumber)) {
-            errors.contactNumber = 'Invalid contact number';
-            isValid = false;
-        }
+      if (!response.ok) {
+        throw new Error('Signup failed. Please try again.');
+      }
+      console.log(response);
 
-        // Password validation: required and at least 6 characters long
-        if (!formData.password.trim()) {
-            errors.password = 'Password is required';
-            isValid = false;
-        } else if (formData.password.trim().length < 8) {
-            errors.password = 'Password must be at least 8 characters long';
-            isValid = false;
-        }
+      // Clear form fields after successful signup
+      setEmail('');
+      setPassword('');
+      setFirstName('');
+      setLastName('');
+      setContactNumber('');
+      setConfirmPassword('');
 
-        if (isValid) {
-            // Submit the form or perform further actions
-            console.log('Form submitted:', formData);
-            setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                contactNumber: '',
-                password: ''
-            });
-        } else {
-            // Update state with validation errors
-            setFormErrors(errors);
-        }
-    };
-    return (
-        <>
-            <Container>
-                <Link to='/'>
-                    <Button variant='outlined' style={{ backgroundColor: '#9A7C5D', color: 'black', marginTop: '10px', border: 'none' }}>BACK</Button>
-                    {/* <ArrowBackIosNew style={{ textAlign: 'center', backgroundColor: '#9A7C5D', color: 'black',, borderRadius: '90px', padding: '10px' }}></ArrowBackIosNew> */}
-                </Link>
+      // Optionally, you can redirect the user to another page after successful signup
+      // history.push('/dashboard');
+    } catch (error) {
+      console.log(error.message);
+      // setError(error.message);
+    }
+  };
 
-                <form className="container" onSubmit={handleSubmit}>
-                    <PermIdentityIcon sx={{ borderRadius: '100px', padding: '15px', backgroundColor: 'green', color: 'white' }} />
-                    <Typography variant="h4" gutterBottom>
-                        SIGN UP
-                    </Typography>
-                    <TextField
-                        className="textField"
-                        label="First Name"
-                        name="firstName"
-                        sx={{ fontSize: '10px' }}
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        error={!!formErrors.firstName}
-                        helperText={formErrors.firstName}
-                        required
 
-                    />
-                    <TextField
-                        className="textField"
-                        label="Last Name"
-                        name="lastName"
-                        sx={{ fontSize: '10px' }}
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        error={!!formErrors.lastName}
-                        helperText={formErrors.lastName}
-                        style={{ marginTop: '10px' }}
-                        required
-
-                    />
-                    <TextField
-                        className="textField"
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        error={!!formErrors.email}
-                        helperText={formErrors.email}
-                        style={{ marginTop: '10px' }}
-                        required
-                    />
-
-                    <TextField
-                        className="textField"
-                        label="Contact Number"
-                        name="contactNumber"
-                        type="tel"
-                        value={formData.contactNumber}
-                        onChange={handleChange}
-                        error={!!formErrors.contactNumber}
-                        helperText={formErrors.contactNumber}
-                        style={{ marginTop: '10px' }}
-                        required
-                    />
-                    <TextField
-                        className="textField"
-                        label="Password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        error={!!formErrors.password}
-                        helperText={formErrors.password}
-                        style={{ marginTop: '10px', marginBottom: '6px' }}
-                        required
-                    />
-                    <Button className="signUpButton" variant="contained" color="primary" type="submit">
-                        Sign Up
-                    </Button>
-                </form>
-            </Container>
-        </>
-    )
+  return (
+    <>
+      <NavigationBar />
+      <div className="signupBucket">
+        <form autoComplete="off" onSubmit={onSubmit}>
+          <Avatar className="avatarIcon">
+            <LockIcon />
+          </Avatar>
+          <Typography gutterBottom variant="h5" component="p">
+            Sign up
+          </Typography>
+          <TextField
+            label="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+            variant="outlined"
+            type="text"
+            sx={{ mb: 4 }}
+            fullWidth
+            value={firstName}
+            error={firstNameError}
+          />
+          <TextField
+            label="Last Name"
+            onChange={(e) => setLastName(e.target.value)}
+            required
+            variant="outlined"
+            type="text"
+            sx={{ mb: 4 }}
+            fullWidth
+            value={lastName}
+            error={lastNameError}
+          />
+          <TextField
+            label="Email Address"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            variant="outlined"
+            type="email"
+            sx={{ mb: 4 }}
+            fullWidth
+            value={email}
+            error={emailError}
+          />
+          <TextField
+            label="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            variant="outlined"
+            type="password"
+            value={password}
+            error={passwordError}
+            fullWidth
+            sx={{ mb: 4 }}
+          />
+          <TextField
+            label="Confirm Password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            variant="outlined"
+            type="password"
+            value={confirmPassword}
+            error={password.length > 0 && confirmPassword !== password}
+            fullWidth
+            sx={{ mb: 4 }}
+          />
+          <TextField
+            label="Contact Number"
+            onChange={(e) => setContactNumber(e.target.value)}
+            required
+            variant="outlined"
+            type="tel"
+            sx={{ mb: 4 }}
+            fullWidth
+            value={contactNumber}
+            error={contactNumberError}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{ mt: 2, width: "100%" }}
+            disabled={password.length > 0 && confirmPassword !== password}
+          >
+            Sign Up
+          </Button>
+          <div className="loginLink">
+            <Link to="/signin">Already have an account? Sign in</Link>
+          </div>
+        </form>
+      </div>
+      <div className="signupFooter">
+        Copyright &copy; <Link href="https://www.upgrad.com/">upGrad</Link> 2023
+      </div>
+    </>
+  );
 }
 
-export default SignUp
+export default Signup;
