@@ -13,7 +13,7 @@ import { Context } from "../../common/Context";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import '../NavigationBar/NavigationBar.css'
 
-const orangeTheme = createTheme({
+const purpleTheme = createTheme({
   components: {
     MuiOutlinedInput: {
       styleOverrides: {
@@ -116,7 +116,7 @@ function NavigationBar({ loggedIn, isAdmin, isProductPage }) {
               {isProductPage && 
               <div className='search-bar'>
                 <SearchIcon />
-                <ThemeProvider theme={orangeTheme}>
+                <ThemeProvider theme={purpleTheme}>
                   <Autocomplete
                     id="search-bar"
                     sx={{ width: "100%", backgroundColor: "#333333", color: 'white', borderRadius: "5px" }}
